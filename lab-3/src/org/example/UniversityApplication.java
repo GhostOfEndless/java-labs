@@ -1,34 +1,38 @@
 package org.example;
 
-import org.example.controller.UniversityController;
-import org.example.view.UniversityView;
+import org.example.controller.TestController;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.IntStream;
+
 
 /**
- * Класс UniversityApplication представляет собой точку входа в приложение,
- * которое симулирует процесс выставления оценок студентам и обновление настроения их родителей.
+ * Главный класс приложения, которое тестирует различные типы списков с использованием {@link TestController}.
+ * Выполняет тестирование работы с разными объемами данных и выводит результаты замеров времени.
  */
 public class UniversityApplication {
 
     /**
-     * Основной метод, который запускает приложение.
-     * Он создает экземпляры контроллера университета и представления, а затем:
-     * 1. Симулирует процесс выставления оценок студентам.
-     * 2. Обновляет настроение родителей на основе оценок студентов.
-     * 3. Отображает результаты для студентов, преподавателей и родителей.
+     * Точка входа в программу. Тестирует работу списков с различным количеством элементов
+     * и выводит результаты выполнения операций.
      *
-     * @param args аргументы командной строки (не используются в данном приложении).
+     * @param args Аргументы командной строки (не используются).
      */
     public static void main(String[] args) {
-        UniversityController controller = new UniversityController();
-        UniversityView view = new UniversityView();
+        var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        var testController = new TestController();
 
-        // Симуляция выставления оценок
-        controller.simulateGrading();
+        System.out.printf("Start program: %s\n", LocalDateTime.now().format(formatter));
 
-        // Обновление настроения родителей
-        controller.updateParentsMood();
+        IntStream.range(1, 6).forEach(i -> {
+            var numOfElements = (int) Math.pow(10, i);
+            System.out.printf("\n---------- TEST WITH %d ELEMENTS----------\n", numOfElements);
+            testController.testArrayList(numOfElements);
+            testController.testLinkedList(numOfElements);
+            testController.testCustomArrayList(numOfElements);
+        });
 
-        // Отображение результатов
-        view.displayResults(controller.getStudents(), controller.getTeachers(), controller.getParents());
+        System.out.printf("\nFinish program: %s\n", LocalDateTime.now().format(formatter));
     }
 }
