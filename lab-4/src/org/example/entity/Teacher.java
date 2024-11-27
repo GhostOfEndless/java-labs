@@ -1,54 +1,98 @@
 package org.example.entity;
 
 /**
- * Представляет преподавателя в системе университета.
- * Расширяет класс Person, добавляя специфичную для преподавателя информацию
- * и функциональность, такую как преподаваемый предмет и возможность выставлять оценки.
+ * Класс {@code Teacher} представляет преподавателя.
+ * Преподаватель связан с определенным предметом и может выставлять
+ * оценки студентам. В зависимости от этих оценок настроение родителя
+ * студента может изменяться, что влияет на премиальные студента.
  */
-public class Teacher extends Person {
-    /** Предмет, который преподает учитель */
-    private Subject subject;
+public class Teacher {
+  private String name;
+  private Subject subject;
 
-    /**
-     * Создает нового преподавателя с заданными параметрами.
-     *
-     * @param name    Имя преподавателя
-     * @param age     Возраст преподавателя
-     * @param gender  Пол преподавателя (М - мужской, Ж - женский)
-     * @param subject Предмет, который преподает учитель
-     */
-    public Teacher(String name, int age, char gender, Subject subject) {
-        super(name, age, gender);
-        this.subject = subject;
+  /**
+   * Создает нового преподавателя с указанными именем и предметом.
+   *
+   * @param name    имя преподавателя
+   * @param subject предмет, который преподает преподаватель
+   */
+  public Teacher(String name, Subject subject) {
+    this.name = name;
+    this.subject = subject;
+  }
+
+  /**
+   * Возвращает имя преподавателя.
+   *
+   * @return имя преподавателя
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Возвращает предмет, который преподает преподаватель.
+   *
+   * @return предмет преподавателя
+   */
+  public Subject getSubject() {
+    return subject;
+  }
+
+  /**
+   * Выставляет оценки студенту и рассчитывает среднюю оценку.
+   * В зависимости от средней оценки, настроение родителя изменяется,
+   * что влияет на премиальные студента.
+   *
+   * @param student студент, которому выставляются оценки
+   * @param grades  массив из 5 оценок
+   * @throws IllegalArgumentException если количество оценок не равно 5
+   */
+  public void setGrades(Student student, int[] grades) {
+    if (grades.length != 5) {
+      throw new IllegalArgumentException("Должно быть ровно 5 оценок.");
     }
 
-    /**
-     * Выставляет оценку студенту по предмету, который преподает учитель.
-     *
-     * @param student Студент, которому выставляется оценка
-     * @param grade   Числовое значение оценки
-     */
-    public void gradeStudent(Student student, int grade) {
-        student.addGrade(new Grade(subject, grade));
+    double sum = 0;
+    for (int grade : grades) {
+      sum += grade;
+    }
+    double average = sum / grades.length;
+    student.setAverageGrade(average);
+    adjustParentMood(student);
+  }
+
+  /**
+   * Регулирует настроение родителя на основе средней оценки студента.
+   * - 3.0 <= средняя оценка < 4.0: Родитель "хмурый".
+   * - 4.0 <= средняя оценка <= 4.5: Родитель "удовлетворенный".
+   * - средняя оценка > 4.5: Родитель "радостный".
+   *
+   * @param student студент, чьи оценки оцениваются
+   */
+  private void adjustParentMood(Student student) {
+    double avgGrade = student.getAverageGrade();
+    Parent parent = student.getParent();
+
+    if (avgGrade >= 3.0 && avgGrade < 4.0) {
+      parent.setMood("хмурый");
+    } else if (avgGrade >= 4.0 && avgGrade <= 4.5) {
+      parent.setMood("удовлетворенный");
+    } else if (avgGrade > 4.5) {
+      parent.setMood("радостный");
     }
 
-    public Subject getSubject() {
-        return subject;
-    }
+    parent.giveBonus(student);
+  }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
-    /**
-     * Возвращает строковое представление преподавателя.
-     *
-     * @return Строка с информацией о преподавателе, включая имя и преподаваемый предмет
-     */
-    @Override
-    public String toString() {
-        return "Преподаватель: %s, Предмет: %s"
-                .formatted(name, subject.name());
-    }
+  /**
+   * Возвращает строковое представление данных преподавателя, включая
+   * его имя и предмет, который он преподает.
+   *
+   * @return строковое представление информации о преподавателе
+   */
+  @Override
+  public String toString() {
+    return "Преподаватель: " + name + ", Предмет: " + subject.getName();
+  }
 }
-

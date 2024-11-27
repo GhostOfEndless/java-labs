@@ -1,112 +1,79 @@
 package org.example.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Представляет родителя в системе университета.
- * Расширяет класс Person, добавляя функциональность для работы с детьми-студентами,
- * настроением и выплатой премиальных.
+ * Класс {@code Parent} представляет родителя студента.
+ * Родитель следит за успеваемостью студента и определяет своё настроение
+ * на основе оценок студента. Родитель также может выдавать премиальные
+ * в зависимости от результатов студента.
  */
-public class Parent extends Person {
-    /** Список детей-студентов */
-    private final List<Student> children;
+public class Parent {
 
-    /** Текущее настроение родителя */
-    private String mood;
+  private String name;
+  private String mood;
 
-    /** Общая сумма выплаченных премиальных */
-    private int totalBonusPaid;
+  /**
+   * Создает нового родителя с указанным именем.
+   *
+   * @param name имя родителя
+   */
+  public Parent(String name) {
+    this.name = name;
+  }
 
-    /**
-     * Создает нового родителя с заданными параметрами.
-     *
-     * @param name   Имя родителя
-     * @param age    Возраст родителя
-     * @param gender Пол родителя (М - мужской, Ж - женский)
-     */
-    public Parent(String name, int age, char gender) {
-        super(name, age, gender);
-        this.children = new ArrayList<>();
-        this.mood = "нейтральный";
-        this.totalBonusPaid = 0;
+  /**
+   * Возвращает имя родителя.
+   *
+   * @return имя родителя
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Возвращает текущее настроение родителя, которое отражает его
+   * удовлетворенность успеваемостью студента.
+   *
+   * @return настроение родителя ("хмурый", "удовлетворенный" или "радостный")
+   */
+  public String getMood() {
+    return mood;
+  }
+
+  /**
+   * Устанавливает настроение родителя на основе успеваемости студента.
+   *
+   * @param mood новое настроение родителя
+   */
+  public void setMood(String mood) {
+    this.mood = mood;
+  }
+
+  /**
+   * Выдает премиальные студенту на основе настроения родителя.
+   * Если родитель "удовлетворенный", студент получает 5000. Если
+   * родитель "радостный", студент получает 10000. Если родитель
+   * "хмурый", премиальные не выдаются.
+   *
+   * @param student студент, получающий премиальные
+   */
+  public void giveBonus(Student student) {
+    if (mood.equals("удовлетворенный")) {
+      student.setBonus(5000);
+    } else if (mood.equals("радостный")) {
+      student.setBonus(10000);
+    } else {
+      student.setBonus(0);
     }
+  }
 
-    /**
-     * Добавляет ребенка-студента к списку детей родителя.
-     *
-     * @param child Студент, являющийся ребенком данного родителя
-     */
-    public void addChild(Student child) {
-        children.add(child);
-    }
-
-    /**
-     * Обновляет настроение родителя и выплачивает премиальные детям
-     * в зависимости от их средних оценок.
-     * Настроение и премии определяются следующим образом:
-     * - Средняя оценка 4.6-5.0: "радостный", премия 10000 руб.
-     * - Средняя оценка 4.0-4.5: "удовлетворенный", премия 5000 руб.
-     * - Средняя оценка менее 4.0: "хмурый", премия 0 руб.
-     */
-    public void updateMoodAndPayBonus() {
-        for (Student child : children) {
-            double avgGrade = child.getAverageGrade();
-            if (avgGrade >= 4.6 && avgGrade <= 5.0) {
-                mood = "радостный";
-                int bonus = 10000;
-                child.setBonus(bonus);
-                totalBonusPaid += bonus;
-            } else if (avgGrade >= 4.0 && avgGrade < 4.6) {
-                mood = "удовлетворенный";
-                int bonus = 5000;
-                child.setBonus(bonus);
-                totalBonusPaid += bonus;
-            } else {
-                mood = "хмурый";
-                child.setBonus(0);
-            }
-        }
-    }
-
-    public String getMood() {
-        return mood;
-    }
-
-    public void setMood(String mood) {
-        this.mood = mood;
-    }
-
-    public int getTotalBonusPaid() {
-        return totalBonusPaid;
-    }
-
-    public void setTotalBonusPaid(int totalBonusPaid) {
-        this.totalBonusPaid = totalBonusPaid;
-    }
-
-    public List<String> getChildrenNames() {
-        return children.stream()
-                .map(Student::getName)
-                .toList();
-    }
-
-    public void removeChild(Student child) {
-        children.remove(child);
-    }
-
-    public void clearChildren() {
-        children.clear();
-    }
-
-    /**
-     * Возвращает строковое представление родителя.
-     *
-     * @return Строка с информацией о родителе, включая имя, настроение и общую сумму выплаченных премиальных
-     */
-    @Override
-    public String toString() {
-        return String.format("Родитель: %s, Настроение: %s, Выплаченные премиальные: %d руб.",
-                name, mood, totalBonusPaid);
-    }
+  /**
+   * Возвращает строковое представление данных родителя, включая
+   * его имя и настроение.
+   *
+   * @return строковое представление информации о родителе
+   */
+  @Override
+  public String toString() {
+    return "Родитель: " + name + ", Настроение: " + mood;
+  }
 }

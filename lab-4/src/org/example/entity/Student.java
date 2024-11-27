@@ -1,88 +1,116 @@
 package org.example.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Представляет студента в системе университета.
- * Расширяет класс Person, добавляя функциональность для работы с оценками и премиями.
+ * Класс {@code Student} представляет студента в образовательной системе.
+ * Хранит личную информацию о студенте, включая имя, возраст,
+ * пол, среднюю оценку и информацию о родителе.
+ * Студент может получать премиальные в зависимости от успеваемости,
+ * которые управляются родителем.
  */
-public class Student extends Person {
+public class Student {
+  private String name;
+  private int age;
+  private String gender;
+  private double averageGrade;
+  private Parent parent;
+  private int bonus;
 
-    /** Средний балл студента */
-    private double averageGrade;
+  /**
+   * Создает нового студента с указанными данными.
+   *
+   * @param name   имя студента
+   * @param age    возраст студента
+   * @param gender пол студента (например, "Мужской", "Женский")
+   * @param parent родитель студента
+   */
+  public Student(String name, int age, String gender, Parent parent) {
+    this.name = name;
+    this.age = age;
+    this.gender = gender;
+    this.parent = parent;
+  }
 
-    /** Сумма премиальных студента */
-    private int bonus;
+  /**
+   * Возвращает имя студента.
+   *
+   * @return имя студента
+   */
+  public String getName() {
+    return name;
+  }
 
-    /** Список оценок студента */
-    private final List<Grade> grades;
+  /**
+   * Возвращает возраст студента.
+   *
+   * @return возраст студента
+   */
+  public int getAge() {
+    return age;
+  }
 
-    /**
-     * Создает нового студента с заданными параметрами.
-     *
-     * @param name   Имя студента
-     * @param age    Возраст студента
-     * @param gender Пол студента (М - мужской, Ж - женский)
-     */
-    public Student(String name, int age, char gender) {
-        super(name, age, gender);
-        this.grades = new ArrayList<>();
-    }
+  /**
+   * Возвращает пол студента.
+   *
+   * @return пол студента
+   */
+  public String getGender() {
+    return gender;
+  }
 
-    /**
-     * Добавляет новую оценку студенту и пересчитывает средний балл.
-     *
-     * @param grade Новая оценка
-     */
-    public void addGrade(Grade grade) {
-        grades.add(grade);
-        calculateAverageGrade();
-    }
+  /**
+   * Возвращает родителя студента.
+   *
+   * @return родитель студента
+   */
+  public Parent getParent() {
+    return parent;
+  }
 
-    /**
-     * Пересчитывает средний балл студента на основе всех его оценок.
-     * Если оценок нет, устанавливает средний балл в 0.
-     */
-    private void calculateAverageGrade() {
-        if (grades.isEmpty()) {
-            averageGrade = 0;
-        } else {
-            double sum = grades.stream().mapToDouble(Grade::value).sum();
-            averageGrade = sum / grades.size();
-        }
-    }
+  /**
+   * Устанавливает среднюю оценку студента на основе выставленных оценок.
+   *
+   * @param averageGrade средняя оценка студента
+   */
+  public void setAverageGrade(double averageGrade) {
+    this.averageGrade = averageGrade;
+  }
 
-    /**
-     * Устанавливает сумму премиальных для студента.
-     *
-     * @param bonus Сумма премиальных в рублях
-     */
-    public void setBonus(int bonus) {
-        this.bonus = bonus;
-    }
+  /**
+   * Возвращает среднюю оценку студента.
+   *
+   * @return средняя оценка студента
+   */
+  public double getAverageGrade() {
+    return averageGrade;
+  }
 
-    /**
-     * Возвращает текущий средний балл студента.
-     *
-     * @return Средний балл
-     */
-    public double getAverageGrade() {
-        return averageGrade;
-    }
+  /**
+   * Устанавливает премиальные, которые студент получает от родителя.
+   *
+   * @param bonus сумма премиальных для студента
+   */
+  public void setBonus(int bonus) {
+    this.bonus = bonus;
+  }
 
-    public int getBonus() {
-        return bonus;
-    }
+  /**
+   * Возвращает сумму премиальных студента.
+   *
+   * @return сумма премиальных
+   */
+  public int getBonus() {
+    return bonus;
+  }
 
-    /**
-     * Возвращает строковое представление студента.
-     *
-     * @return Строка с информацией о студенте, включая имя, возраст, пол, средний балл и сумму премиальных
-     */
-    @Override
-    public String toString() {
-        return "Студент: %s, Возраст: %d, Пол: %c, Средняя оценка: %.2f, Премиальные: %d руб."
-                .formatted(name, age, gender, averageGrade, bonus);
-    }
+  /**
+   * Возвращает строковое представление данных студента, включая
+   * имя, возраст, пол, среднюю оценку и сумму премиальных.
+   *
+   * @return строковое представление информации о студенте
+   */
+  @Override
+  public String toString() {
+    return "Студент: " + name + ", Возраст: " + age + ", Пол: " + gender +
+        ", Средняя оценка: " + averageGrade + ", Премиальные: " + bonus;
+  }
 }
