@@ -202,7 +202,7 @@ public class TestDb {
   public void testAddStudent() {
     Parent parent = new Parent("Родитель3");
     dbManager.addParent(parent);
-    Student student = new Student("Иван Дурачек", 15, "М", parent);
+    Student student = new Student("Иван Иванов", 15, "М", parent);
 
     dbManager.addStudent(student);
 
@@ -223,7 +223,7 @@ public class TestDb {
   public void testRemoveStudent() {
     Parent parent = new Parent("Родитель4");
     dbManager.addParent(parent);
-    Student student = new Student("Дурачек Иван", 16, "М", parent);
+    Student student = new Student("Петр Петров", 16, "М", parent);
 
     dbManager.addStudent(student);
     int studentId = dbManager.getStudentId(student);
@@ -242,14 +242,14 @@ public class TestDb {
   }
 
   public void testUpdateStudent() {
-    Parent parent = new Parent("Майкл Джордан");
+    Parent parent = new Parent("Олег Олегович");
     dbManager.addParent(parent);
-    Student student = new Student("Его сын", 17, "М", parent);
+    Student student = new Student("Ольга Олеговна", 17, "М", parent);
     dbManager.addStudent(student);
     int studentId = dbManager.getStudentId(student);
     int parentId = dbManager.getParentId(parent);
 
-    Student updatedStudent = new Student("Его дочь", 17, "Ж", parent);
+    Student updatedStudent = new Student("Анна Олеговна", 17, "Ж", parent);
     dbManager.updateStudent(studentId, updatedStudent);
 
     if ("Его дочь".equals(dbManager.getStudentById(studentId).getName())) {
